@@ -2,7 +2,7 @@ Package.describe({
   name: "jameslefrere:autoform-ratchet",
   summary: "Ratchet theme for Autoform",
   version: "0.1.0",
-  git: ""
+  git: "https://github.com/JamesLefrere/meteor-autoform-ratchet.git"
 });
 
 Package.onUse(function(api) {
