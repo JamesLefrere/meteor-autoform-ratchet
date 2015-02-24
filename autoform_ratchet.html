@@ -1,0 +1,201 @@
+<template name="quickForm_ratchet">
+	<div class="item-group">
+		{{#autoForm this.qfAutoFormContext}}
+			{{> afQuickFields}}
+			{{#if qfShouldRenderButton}}
+				<div class="input-row">
+				<div class="bar bar-standard">
+					<button type="submit" {{submitButtonAtts}}>
+						{{#with ../atts.buttonContent}}
+							{{this}}
+						{{else}}
+							Submit
+						{{/with}}
+					</button>
+				</div>
+				</div>
+			{{/if}}
+		{{/autoForm}}
+	</div>
+</template>
+
+<template name="afFormGroup_ratchet">
+	{{#if afFieldIsInvalid name=this.atts.name}}
+	<div class="input-row error-message">{{{afFieldMessage name=this.atts.name}}}</div>
+	{{/if}}
+	<div class="input-row {{#if afFieldIsInvalid name=this.atts.name}} has-error{{/if}}">
+		{{#unless skipLabel}}
+			<label {{ratchetFieldLabelAtts}}>{{#if this.labelText}}{{this.labelText}}{{else}}{{afFieldLabelText name=this.atts.name}}{{/if}}</label>
+		{{/unless}}
+		{{> afFieldInput this.afFieldInputAtts}}
+	</div>
+</template>
+
+<template name="afObjectField_ratchet">
+	{{> afQuickFields name=this.atts.name}}
+</template>
+
+<template name="afArrayField_ratchet">
+	{{#if afFieldIsInvalid name=this.atts.name}}
+		<div class="has-error">
+			<span class="help-block">{{{afFieldMessage name=this.atts.name}}}</span>
+		</div>
+	{{/if}}
+	<ul class="table-view af-multiple">
+		{{#afEachArrayItem name=this.atts.name minCount=this.atts.minCount maxCount=this.atts.maxCount}}
+			{{#if afArrayFieldHasMoreThanMinimum name=../atts.name minCount=../atts.minCount maxCount=../atts.maxCount}}
+			<div class="has-remove-item">
+				<button type="button" class="btn autoform-remove-item">Remove</button>
+			</div>
+			{{/if}}
+			<li class="autoform-array-item">
+				{{> afQuickField name=this.name options="auto"}}
+			</li>
+		{{/afEachArrayItem}}
+		{{#if afArrayFieldHasLessThanMaximum name=this.atts.name minCount=this.atts.minCount maxCount=this.atts.maxCount}}
+			<div class="has-add-item">
+				<button type="button" class="btn autoform-add-item" data-autoform-field="{{this.atts.name}}" data-autoform-minCount="{{this.atts.minCount}}" data-autoform-maxCount="{{this.atts.maxCount}}">Add</button>
+			</div>
+		{{/if}}
+	</ul>
+</template>
+
+<template name="afCheckbox_ratchet">
+	{{#if this.atts.inline}}
+		<label>
+			<input type="checkbox" value="{{this.value}}" {{atts}}>
+			{{{afFieldLabelText name=this.name}}}
+		</label>
+	{{else}}
+		<label>{{{afFieldLabelText name=this.name}}}</label>
+		<label class="label-switch">
+			<input type="checkbox" value="{{this.value}}" {{atts}}>
+			<div class="checkbox"></div>
+		</label>
+	{{/if}}
+</template>
+
+<template name="afCheckboxGroup_ratchet">
+	<div class="input-group af-checkbox-group" {{dsk}}>
+		<ul class="table-view">
+			{{#each this.items}}
+			<li class="table-view-cell">
+				<div class="label-checkbox input-row">
+					<input type="checkbox" value="{{this.value}}" {{atts}} />
+					<div class="item-media">
+						<i class="icon icon-form-checkbox"></i>
+					</div>
+					<label>{{this.label}}</label>
+				</div>
+			</li>
+			{{/each}}
+		</ul>
+	</div>
+</template>
+
+<template name="afCheckboxGroupInline_ratchet">
+	<div class="af-checkbox-group" {{dsk}}>
+		{{#each this.items}}
+			<label class="checkbox-inline">
+				<input type="checkbox" value="{{this.value}}" {{atts}} />
+				{{this.label}}
+			</label>
+		{{/each}}
+	</div>
+</template>
+
+<template name="afRadio_ratchet">
+	<div class="radio">
+		<label>
+			<input type="radio" value="{{this.value}}" {{atts}} />
+			{{afFieldLabelText name=this.name}}
+		</label>
+	</div>
+</template>
+
+<template name="afRadioGroup_ratchet">
+	<div class="input-group af-radio-group" {{dsk}}>
+		{{#each this.items}}
+			<div class="radio">
+				<label>
+					<input type="radio" value="{{this.value}}" {{atts}} />
+					{{this.label}}
+				</label>
+			</div>
+		{{/each}}
+	</div>
+</template>
+
+<template name="afRadioGroupInline_ratchet">
+	<div class="input-group af-radio-group" {{dsk}}>
+		{{#each this.items}}
+			<label class="radio-inline">
+				<input type="radio" value="{{this.value}}" {{atts}} />
+				{{this.label}}
+			</label>
+		{{/each}}
+	</div>
+</template>
+
+<template name="afBooleanRadioGroup_ratchet">
+	<div {{dsk}}>
+		<div class="radio">
+			<label><input type="radio" value="false" name="{{this.name}}" {{falseAtts}} /> {{#with this.atts.falseLabel}}{{this}}{{else}}False{{/with}}</label>
+		</div>
+		<div class="radio">
+			<label><input type="radio" value="true" name="{{this.name}}" {{trueAtts}} /> {{#with this.atts.trueLabel}}{{this}}{{else}}True{{/with}}</label>
+		</div>
+	</div>
+</template>
+
+<template name="afSelect_ratchet">
+	<select {{atts}}>
+		{{#each this.items}}
+			{{#if this.optgroup}}
+				<optgroup label="{{this.optgroup}}">
+					{{#each this.items}}
+						<option {{optionAtts}}>{{this.label}}</option>
+					{{/each}}
+				</optgroup>
+			{{else}}
+				<option {{optionAtts}}>{{this.label}}</option>
+			{{/if}}
+		{{/each}}
+	</select>
+</template>
+
+<template name="afBooleanSelect_ratchet">
+	<select {{atts}}>
+		{{#each this.items}}
+			<option {{optionAtts}}>{{this.label}}</option>
+		{{/each}}
+	</select>
+</template>
+
+<template name="afSelectMultiple_ratchet">
+	<select {{atts}} multiple>
+		{{#each this.items}}
+			{{#if this.optgroup}}
+				<optgroup label="{{this.optgroup}}">
+					{{#each this.items}}
+						<option {{optionAtts}}>{{this.label}}</option>
+					{{/each}}
+				</optgroup>
+			{{else}}
+				<option {{optionAtts}}>{{this.label}}</option>
+			{{/if}}
+		{{/each}}
+	</select>
+</template>
+
+<template name="afQuickFields_ratchet">
+	<ul class="table-view">
+		{{#each afFieldNames name=this.name}}
+			<li class="table-view-cell">
+				{{#with name=this}}
+					{{> afQuickField quickFieldAtts}}
+				{{/with}}
+			</li>
+		{{/each}}
+	</ul>
+</template>
